@@ -1,0 +1,4 @@
+g++ -shared -fPIC -o libessentials.dll essentialibs.cpp -I"G:/msys2/mingw64/include" -L"G:/msys2/mingw64/lib" -lcurl -lssl -lcrypto -lws2_32
+
+
+g++ -shared -fPIC -o libpath.dll addresses.cpp -I"G:/msys2/mingw64/include" -L"G:/msys2/mingw64/lib" -lcurl -lssl -lcrypto -lws2_32
