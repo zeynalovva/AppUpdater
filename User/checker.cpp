@@ -6,6 +6,8 @@
 #include "../Libraries/Headers/addresses.h"
 #include "../Libraries/Headers/checksum.h"
 
+
+
 using namespace std::filesystem;
 using json = nlohmann::json;
 
@@ -15,6 +17,33 @@ bool find(std::vector<std::pair<std::string, std::string>>v, std::string folder_
     }
     return 1;
 }
+
+
+
+std::string translator(std::string pth){
+    std::string URL = "";
+    for(int i = 0;i<pth.size();i++){
+        if(pth[i] == ' ') URL+="%20";
+        else if(pth[i] == '!') URL+="%21";
+        else if(pth[i] == '#') URL+="%23";
+        else if(pth[i] == '$') URL+="%24";
+        else if(pth[i] == '%') URL+="%25";
+        else if(pth[i] == '&') URL+="%26";
+        else if(pth[i] == '+') URL+="%2B";
+        else if(pth[i] == ',') URL+="%2C";
+        else if(pth[i] == '/') URL+="%2F";
+        else if(pth[i] == ':') URL+="%3A";
+        else if(pth[i] == ';') URL+="%3B";
+        else if(pth[i] == '=') URL+="%3D";
+        else if(pth[i] == '?') URL+="%3F";
+        else if(pth[i] == '@') URL+="%40";
+        else if(pth[i] == '[') URL+="%5B";
+        else if(pth[i] == ']') URL+="%5D";
+        else URL+=pth[i];
+    }
+    return URL;
+}
+
 
 bool find(std::vector<std::pair<std::string, std::string>>v, std::string file_path, std::string hash){
     for(const auto& [key, value] : v){
@@ -50,14 +79,18 @@ bool downloadFile(const std::string& url, const std::string& filename) {
 
 int main(){
 
-    //Delete altered or non-exsisting files and folders
+    string symb = "/";
+    #ifdef _WIN32
+        symb = "\\";
+    #endif
+    std::string server = "http://192.168.152.129/test/";
     READ src;
     src.setPath("C:\\Users\\zeyna\\Desktop\\UpdateTest");
-    std::string url = "http://qayidiss.lovestoblog.com/data.txt", filename = "data.json";
-    if (downloadFile(url, filename)) {
-        std::cout << "Download successful!" << std::endl;
+    std::string filename = "data.json";
+    if (downloadFile(server + "data.json", filename)) {
+        std::cout << "Download successful: Hashtable" << std::endl;
     } else {
-        std::cout << "Download failed!" << std::endl;
+        std::cout << "Download failed: Hashtable" << std::endl;
     }
     std::ifstream f("data.json");
     json data = json::parse(f);
@@ -68,8 +101,13 @@ int main(){
     pt = data["folders"];
     for(const auto& [key, value] : pt.items()){ folder.push_back({key, value});}
 
+
+    //Delete altered or non-exsisting files and folders
+
+
     for(const auto& i : recursive_directory_iterator(src.getPath())){
         path t = relative(i, src.getPath());
+
         if(is_directory(i)){
             if(find(folder, t.generic_string()))
                 remove_all(i);                   
@@ -77,6 +115,34 @@ int main(){
         else{
             if(find(file, t.generic_string(), checksum(i)))
                 remove(i);
+        }
+    }
+
+    //Create non-exsisting folders
+    for(auto [key, value] : folder){
+        for(int i = 0;i<value.size();i++){
+            if(value[i] == '/' or value[i] == '\\') value[i] = symb[0];
+        }
+        std::string pth = src.getPath() + symb + value;     
+        if(!exists(pth)){
+            create_directories(pth);
+            std::cout<<"Directory created: "<<pth<<std::endl;
+        }
+    }
+
+    //Download files from the web-server
+    for(auto [key, value] : file){
+        std::string saveKey = key;
+        for(int i = 0;i<key.size();i++){
+            if(key[i] == '/' or key[i] == '\\') key[i] = symb[0];
+        }
+        std::string pth = src.getPath() + symb + key; 
+        if(!exists(pth)){
+            if (downloadFile(server + translator(saveKey), pth)) {
+                std::cout << "Download successful: " << saveKey << std::endl;
+            } else {
+                std::cout << "Download failed!" << std::endl;
+            }
         }
     }
     

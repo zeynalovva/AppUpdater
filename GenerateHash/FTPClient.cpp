@@ -7,7 +7,7 @@ size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream) {
 }
 
 int main() {
-    const char *ftp_url = "ftp://ftpupload.net/htdocs/data.txt"; 
+    const char *ftp_url = "ftp://ftpupload.net/htdocs/data.json"; 
     const char *username = "if0_36997317";
     const char *password = "hEQwR6EsdkMwS";
     const char *file_path = "data.json"; 
