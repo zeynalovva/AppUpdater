@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "Libraries/Headers/essentialibs.h"
-#include "Libraries/Headers/addresses.h"
-#include "Libraries/Headers/checksum.h"
+#include "../Libraries/Headers/essentialibs.h"
+#include "../Libraries/Headers/addresses.h"
+#include "../Libraries/Headers/checksum.h"
 using namespace std::filesystem;
 using json = nlohmann::json;
 void checker(){
@@ -21,14 +21,11 @@ void checker(){
     json data;
     std::vector<path>v = src.getList();
     for(auto i : v){
-        if(is_regular_file(i)){
-            path k = relative(i, src.getPath());
+        path k = relative(i, src.getPath());
+        if(is_regular_file(i))
             data["files"][k.generic_string()] = (checksum(i));
-        } 
-        if(is_directory(i)){
-            path k = relative(i, src.getPath());
+        if(is_directory(i))
             data["folders"].push_back(k.generic_string());
-        } 
     }
     std::ofstream file("data.json");
     file << data.dump(4);

@@ -1,15 +1,19 @@
-CC = g++          
-CFLAGS = -I"G:/msys2/mingw64/include" -I"./Libraries/Headers"
-LIBFLAG = -L. -lessentials -lpath -lchecksum -lws2_32
 TARGET = app_updater
-SRC = updater.cpp checker.cpp
+FTP = FTPClient
+FTPRun = g++ .\GenerateHash\FTPClient.cpp -o FTPTest -lcurl -lws2_32 -std=c++17 -I"G:/msys2/mingw64/include" -L"G:\msys2\mingw64\lib"
+AppRun = g++ .\GenerateHash\updater.cpp .\GenerateHash\checker.cpp -o app_updater -L. -lessentials -lpath -lchecksum -lws2_32 -I"G:/msys2/mingw64/include" -I"./Libraries/Headers"
 
-all: $(TARGET)
+all: $(TARGET) $(FTP)
 
 $(TARGET):
-	$(CC) $(SRC) -o $(TARGET)  $(LIBFLAG) $(CFLAGS)
+	$(AppRun)
+$(FTP):
+	$(FTPRun)
+
 
 clean:
 	@del /Q *.o app_updater.exe
+	@del /Q *.o FTPClient.exe
 	@rmdir /S /Q build
+
 
