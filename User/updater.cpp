@@ -35,7 +35,7 @@ void loader(){
         }
         if(k == "INSTALLED_PATH") LOCAL_PATH = t;
         else if(k == "WEBSERVER") SERVER_IP = t;
-    }
+    }//
 }
 
 
