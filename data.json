@@ -1,14 +1,10 @@
 {
     "files": {
-        "4. Data Types and Data Representation in Computers.pdf": "a5a657d4cdd48d49fd23dcd2b5218c0a80c064846c5230d8ad0aa8caa9c202fc",
-        "5. Introduction to Instruction Set Architecture ISA.pdf": "7c271c2f327d2f96b903192b7eaebd870e850daead6b4c75406b7c2052bb4c8c",
-        "6. Instruction Formats and Addressing Modes.pdf": "fddbe61bca89e62453e67b9b4c1adca55fb0de6b1ce7f7e44e996c1429a58cc3",
-        "asdasd": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb"
-    },
-    "folders": [
-        "negrooo",
-        "negrooo/asdasda",
-        "negrooo/asdasda/New folder",
-        "nuga"
-    ]
+        "client.py": "21f463969a70d8962b5e798f78b0f81b574c5c797d4f1ba71936498d4f6a8a55",
+        "config": "f3600ab162e3ea7c9a0c09a2f1d4b9ba8cef8852dab21ac5d0d37258be23ac76",
+        "data.pkl": "ea251b3219bf7df883d84e5d9c5609f36b5991f77960bf414cd064ce2b4dedf9",
+        "distro.json": "8c5b002aa86cb2d926c4068af03acd94360f4439efa582d4700fa73d215b604a",
+        "keys.pkl": "14a8976c05f01794f94a81d61eb344a237946520e08ed8a8b80cc1b251e7809a",
+        "writer.py": "99677468463e570561a56b6e64490eafca0a08d7e86c1acabcff1cd3e11353a9"
+    }
 }

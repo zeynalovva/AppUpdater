@@ -6,10 +6,39 @@
 #include "../Libraries/Headers/addresses.h"
 #include "../Libraries/Headers/checksum.h"
 
-
+std::string SERVER_IP, LOCAL_PATH;
 
 using namespace std::filesystem;
 using json = nlohmann::json;
+
+
+void loader(){
+    std::ifstream f("../options.txt");
+    if(!f.is_open()){
+        std::cerr<<"Error occured while loading options!"<<std::endl;
+        return;
+    }
+
+    std::string line;
+
+    while(getline(f, line)){
+        std::string k = "",t = "";
+        bool flag = false;
+        for(int i = 0;i<line.size();i++){
+            if(flag == true){
+                t+=line[i];
+            }
+            if(line[i] != '=' and flag == false){
+                k+=line[i];
+            }
+            if(line[i] == '=') flag = true;
+        }
+        if(k == "INSTALLED_PATH") LOCAL_PATH = t;
+        else if(k == "WEBSERVER") SERVER_IP = t;
+    }
+}
+
+
 
 bool find(std::vector<std::pair<std::string, std::string>>v, std::string folder_path){
     for(const auto& [key, value] : v){
@@ -18,6 +47,14 @@ bool find(std::vector<std::pair<std::string, std::string>>v, std::string folder_
     return 1;
 }
 
+bool find(std::vector<std::pair<std::string, std::string>>v, std::string file_path, std::string hash){
+    for(const auto& [key, value] : v){
+        if(key == file_path){
+            return value != hash;
+        }
+    }
+    return 1;
+}
 
 
 std::string translator(std::string pth){
@@ -45,15 +82,6 @@ std::string translator(std::string pth){
 }
 
 
-bool find(std::vector<std::pair<std::string, std::string>>v, std::string file_path, std::string hash){
-    for(const auto& [key, value] : v){
-        if(key == file_path){
-            return value != hash;
-        }
-    }
-    return 1;
-}
-
 size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
     std::ofstream* file = static_cast<std::ofstream*>(userp);
     file->write(static_cast<char*>(contents), size * nmemb);
@@ -78,16 +106,15 @@ bool downloadFile(const std::string& url, const std::string& filename) {
 
 
 int main(){
-
+    loader();
     string symb = "/";
     #ifdef _WIN32
         symb = "\\";
     #endif
-    std::string server = "http://192.168.152.129/test/";
     READ src;
-    src.setPath("C:\\Users\\zeyna\\Desktop\\UpdateTest");
+    src.setPath(LOCAL_PATH);
     std::string filename = "data.json";
-    if (downloadFile(server + "data.json", filename)) {
+    if (downloadFile(SERVER_IP + "data.json", filename)) {
         std::cout << "Download successful: Hashtable" << std::endl;
     } else {
         std::cout << "Download failed: Hashtable" << std::endl;
@@ -138,7 +165,7 @@ int main(){
         }
         std::string pth = src.getPath() + symb + key; 
         if(!exists(pth)){
-            if (downloadFile(server + translator(saveKey), pth)) {
+            if (downloadFile(SERVER_IP + translator(saveKey), pth)) {
                 std::cout << "Download successful: " << saveKey << std::endl;
             } else {
                 std::cout << "Download failed!" << std::endl;

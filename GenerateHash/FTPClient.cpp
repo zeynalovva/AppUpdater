@@ -1,12 +1,39 @@
 #include <iostream>
+#include <fstream>
 #include "../Libraries/Headers/essentialibs.h"
 
 size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream) {
     FILE *file = (FILE *)stream;
     return fread(ptr, size, nmemb, file);
 }
+void loader(){
+    std::ifstream f("options.txt");
+    if(!f.is_open()){
+        std::cerr<<"Error occured while loading options!"<<std::endl;
+        return;
+    }
+
+    std::string line;
+
+    while(getline(f, line)){
+        std::string k = "",t = "";
+        bool flag = false;
+        for(int i = 0;i<line.size();i++){
+            if(flag == true){
+                t+=line[i];
+            }
+            if(line[i] != '=' and flag == false){
+                k+=line[i];
+            }
+            if(line[i] == '=') flag = true;
+        }
+        //if(k == "FTP_SERVER") ftp_url = t;
+    }
+}
+
 
 int main() {
+    //loader();
     const char *ftp_url = "ftp://ftpupload.net/htdocs/data.json"; 
     const char *username = "if0_36997317";
     const char *password = "hEQwR6EsdkMwS";

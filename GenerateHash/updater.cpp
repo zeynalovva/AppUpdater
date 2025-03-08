@@ -4,7 +4,6 @@
 using json = nlohmann::json;
 void checker();
 
-
 int main(){
     checker();
 }

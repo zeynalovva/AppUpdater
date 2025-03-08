@@ -7,7 +7,7 @@ using namespace std::filesystem;
 using json = nlohmann::json;
 void checker(){
     READ src;
-    src.setPath("C:\\Users\\zeyna\\Desktop\\test");
+    src.setPath("C:\\Users\\zeyna\\Desktop\\SSHClient");
     if(!exists(src.getPath())){
         std::cerr<<"The path does not exsit!";
         return;
